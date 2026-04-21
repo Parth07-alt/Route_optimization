@@ -1,0 +1,6 @@
+1. net start postgresql-x64-18
+2. uvicorn App.main:app --reload
+3. ngrok http 8000
+4. streamlit run dashboard/app.py
+5. Update Twilio webhook URL with new ngrok URL
+6. Rejoin sandbox if needed

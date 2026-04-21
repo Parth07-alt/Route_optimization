@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Delivery Driver App</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a73e8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Water Driver">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; min-height: 100vh; }
+
+        .header {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white; padding: 20px; text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .header h1 { font-size: 22px; font-weight: 700; }
+        .header p { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+
+        .container { max-width: 480px; margin: 0 auto; padding: 16px; }
+
+        .card {
+            background: white; border-radius: 16px; padding: 20px;
+            margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .card h2 { font-size: 16px; color: #333; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+
+        .driver-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+        .driver-btn {
+            padding: 14px 8px; border: 2px solid #e0e0e0; border-radius: 12px;
+            background: white; font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; text-align: center; color: #555;
+        }
+        .driver-btn:hover { border-color: #1a73e8; color: #1a73e8; }
+        .driver-btn.active { background: #1a73e8; border-color: #1a73e8; color: white; }
+
+        .load-btn {
+            width: 100%; padding: 16px;
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white; border: none; border-radius: 12px;
+            font-size: 16px; font-weight: 600; cursor: pointer;
+            margin-top: 14px; transition: opacity 0.2s;
+        }
+        .load-btn:hover { opacity: 0.9; }
+        .load-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* ✅ Full route button */
+        .full-route-btn {
+            width: 100%; padding: 16px;
+            background: linear-gradient(135deg, #00897b, #004d40);
+            color: white; border: none; border-radius: 12px;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+            margin-bottom: 16px; display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+            box-shadow: 0 3px 10px rgba(0,137,123,0.3);
+            transition: opacity 0.2s;
+        }
+        .full-route-btn:hover { opacity: 0.9; }
+
+        .progress-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+        .progress-item { text-align: center; padding: 12px; border-radius: 12px; background: #f8f9ff; }
+        .progress-item .number { font-size: 28px; font-weight: 700; color: #1a73e8; }
+        .progress-item .label { font-size: 12px; color: #888; margin-top: 2px; }
+
+        .progress-bar-container { background: #e0e0e0; border-radius: 10px; height: 10px; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #1a73e8, #00c853); border-radius: 10px; transition: width 0.5s ease; }
+        .progress-text { text-align: center; font-size: 13px; color: #666; margin-top: 8px; }
+
+        .stop-card {
+            border: 1px solid #e8ecf0; border-radius: 14px; padding: 16px;
+            margin-bottom: 12px; transition: all 0.2s; background: white;
+        }
+        .stop-card.delivered { background: #f1f8f1; border-color: #a5d6a7; opacity: 0.7; }
+
+        .stop-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+
+        .stop-id { background: #1a73e8; color: white; padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+        .stop-id.delivered { background: #4caf50; }
+
+        .status-badge { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+        .status-pending { background: #fff3e0; color: #e65100; }
+        .status-delivered { background: #e8f5e9; color: #2e7d32; }
+
+        .stop-order { font-size: 12px; color: #888; margin-bottom: 6px; }
+        .stop-name { font-size: 17px; font-weight: 700; color: #222; margin-bottom: 4px; }
+        .stop-cans { font-size: 14px; color: #666; margin-bottom: 12px; }
+
+        .stop-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .nav-btn {
+            padding: 12px; background: #e8f0fe; color: #1a73e8;
+            border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; display: flex;
+            align-items: center; justify-content: center; gap: 6px;
+        }
+        .nav-btn:hover { background: #d2e3fc; }
+
+        .done-btn {
+            padding: 12px; background: #e8f5e9; color: #2e7d32;
+            border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; display: flex;
+            align-items: center; justify-content: center; gap: 6px;
+        }
+        .done-btn:hover { background: #c8e6c9; }
+        .done-btn:disabled { background: #f5f5f5; color: #bbb; cursor: not-allowed; }
+
+        .route-info {
+            background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 12px;
+            padding: 12px 16px; margin-bottom: 14px; font-size: 13px;
+            color: #2e7d32; text-align: center;
+        }
+
+        .spinner { text-align: center; padding: 30px; color: #1a73e8; font-size: 15px; }
+        .empty-state { text-align: center; padding: 40px 20px; color: #888; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #333; color: white; padding: 12px 24px;
+            border-radius: 25px; font-size: 14px; z-index: 1000;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .toast.show { opacity: 1; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>💧 Water Delivery</h1>
+    <p>Driver Delivery App</p>
+</div>
+
+<div class="container">
+
+    <div class="card" id="loginCard">
+        <h2>👤 Select Your ID</h2>
+        <div class="driver-grid">
+            <button class="driver-btn" onclick="selectDriver('D1', this)">D1<br><small>Rahul</small></button>
+            <button class="driver-btn" onclick="selectDriver('D2', this)">D2<br><small>Amit</small></button>
+            <button class="driver-btn" onclick="selectDriver('D3', this)">D3<br><small>Suresh</small></button>
+        </div>
+        <button class="load-btn" id="loadBtn" onclick="loadDeliveries()" disabled>
+            Load My Deliveries
+        </button>
+    </div>
+
+    <div class="card hidden" id="progressCard">
+        <h2>📊 Today's Progress</h2>
+        <div class="progress-grid">
+            <div class="progress-item">
+                <div class="number" id="totalStops">0</div>
+                <div class="label">Total Stops</div>
+            </div>
+            <div class="progress-item">
+                <div class="number" id="deliveredStops" style="color:#4caf50">0</div>
+                <div class="label">Delivered</div>
+            </div>
+            <div class="progress-item">
+                <div class="number" id="pendingStops" style="color:#ff9800">0</div>
+                <div class="label">Pending</div>
+            </div>
+        </div>
+        <div class="progress-bar-container" style="margin-top:14px">
+            <div class="progress-bar" id="progressBar" style="width:0%"></div>
+        </div>
+        <div class="progress-text" id="progressText">0% Complete</div>
+    </div>
+
+    <div class="card hidden" id="deliveriesCard">
+        <h2>📋 My Stops</h2>
+        <div id="deliveriesList">
+            <div class="spinner">Loading...</div>
+        </div>
+    </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    const API_URL = "http://localhost:8000";
+
+    // ✅ Depot — fixed warehouse location
+    const DEPOT_LAT = 12.9716;
+    const DEPOT_LON = 77.5946;
+
+    let selectedDriver = null;
+    let currentSessionId = null;
+    let allDeliveries = [];
+
+    // ✅ Coords come directly from deliveries API — no separate call needed
+    let customerCoords = {};
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(() => console.log('SW registered'))
+            .catch(err => console.log('SW error:', err));
+    }
+
+    function selectDriver(driverId, element) {
+        selectedDriver = driverId;
+        document.querySelectorAll('.driver-btn').forEach(btn => btn.classList.remove('active'));
+        element.classList.add('active');
+        document.getElementById('loadBtn').disabled = false;
+        document.getElementById('loadBtn').textContent = `Load Deliveries for ${driverId}`;
+    }
+
+    async function loadDeliveries() {
+        if (!selectedDriver) return;
+
+        document.getElementById('loadBtn').disabled = true;
+        document.getElementById('loadBtn').textContent = 'Loading...';
+
+        try {
+            const response = await fetch(`${API_URL}/driver/${selectedDriver}/deliveries`);
+            const data = await response.json();
+
+            if (data.error || !data.deliveries || data.deliveries.length === 0) {
+                showToast('No deliveries found for today!');
+                document.getElementById('loadBtn').disabled = false;
+                document.getElementById('loadBtn').textContent = `Load Deliveries for ${selectedDriver}`;
+                return;
+            }
+
+            allDeliveries = data.deliveries;
+            currentSessionId = data.session_id;
+
+            // ✅ Build coords directly from deliveries response — no extra API call
+            customerCoords = {};
+            allDeliveries.forEach(d => {
+                if (d.lat && d.lon) {
+                    customerCoords[d.customer_id] = { lat: d.lat, lon: d.lon };
+                }
+            });
+            console.log("✅ Customer coords loaded:", customerCoords);
+
+            document.getElementById('progressCard').classList.remove('hidden');
+            document.getElementById('deliveriesCard').classList.remove('hidden');
+
+            await loadProgress();
+            renderDeliveries();
+
+            document.getElementById('loadBtn').textContent = '🔄 Refresh';
+            document.getElementById('loadBtn').disabled = false;
+
+        } catch (error) {
+            showToast('Error connecting to server!');
+            document.getElementById('loadBtn').disabled = false;
+            document.getElementById('loadBtn').textContent = `Load Deliveries for ${selectedDriver}`;
+        }
+    }
+
+    // ✅ Full route — all pending stops in one Google Maps URL
+    // Format: maps/dir/DEPOT/C1/C2/C3/DEPOT
+    function navigateFullRoute() {
+        const pendingDeliveries = allDeliveries.filter(d => d.status !== 'delivered');
+
+        if (pendingDeliveries.length === 0) {
+            showToast('All stops already delivered!');
+            return;
+        }
+
+        // Start from depot
+        let url = `https://www.google.com/maps/dir/${DEPOT_LAT},${DEPOT_LON}`;
+
+        // Add each pending stop in optimized order
+        let validStops = 0;
+        for (const delivery of pendingDeliveries) {
+            const coords = customerCoords[delivery.customer_id];
+            if (coords) {
+                url += `/${coords.lat},${coords.lon}`;
+                validStops++;
+            }
+        }
+
+        // End back at depot
+        url += `/${DEPOT_LAT},${DEPOT_LON}`;
+
+        if (validStops === 0) {
+            showToast('No coordinates available for stops!');
+            return;
+        }
+
+        console.log(`✅ Opening full route with ${validStops} stops:`, url);
+        window.open(url, '_blank');
+    }
+
+    // ✅ Navigate to single stop only (backup per card)
+    function navigateToStop(customerId) {
+        const coords = customerCoords[customerId];
+        if (coords) {
+            const url = `https://www.google.com/maps/dir/${DEPOT_LAT},${DEPOT_LON}/${coords.lat},${coords.lon}`;
+            window.open(url, '_blank');
+        } else {
+            showToast('Location not available for this stop');
+        }
+    }
+
+    async function loadProgress() {
+        if (!currentSessionId) return;
+        try {
+            const response = await fetch(
+                `${API_URL}/driver/${selectedDriver}/progress/${currentSessionId}`
+            );
+            const progress = await response.json();
+
+            document.getElementById('totalStops').textContent = progress.total;
+            document.getElementById('deliveredStops').textContent = progress.delivered;
+            document.getElementById('pendingStops').textContent = progress.pending;
+
+            const pct = progress.total > 0
+                ? Math.round((progress.delivered / progress.total) * 100)
+                : 0;
+
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressText').textContent = pct + '% Complete';
+
+        } catch (error) {
+            console.log('Progress error:', error);
+        }
+    }
+
+    function renderDeliveries() {
+        const list = document.getElementById('deliveriesList');
+
+        if (allDeliveries.length === 0) {
+            list.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">🎉</div>
+                    <p>All deliveries completed!</p>
+                </div>`;
+            return;
+        }
+
+        const pendingCount = allDeliveries.filter(d => d.status !== 'delivered').length;
+
+        // ✅ Full route button at top
+        let html = '';
+        if (pendingCount > 0) {
+            html += `
+                <div class="route-info">
+                    📍 ${pendingCount} stop(s) remaining — tap below to start full route
+                </div>
+                <button class="full-route-btn" onclick="navigateFullRoute()">
+                    🗺️ Navigate Full Route (${pendingCount} stops)
+                </button>
+            `;
+        }
+
+        // Individual stop cards
+        html += allDeliveries.map((delivery, index) => `
+            <div class="stop-card ${delivery.status === 'delivered' ? 'delivered' : ''}"
+                 id="stop_${delivery.id}">
+
+                <div class="stop-header">
+                    <span class="stop-id ${delivery.status === 'delivered' ? 'delivered' : ''}">
+                        ${delivery.customer_id}
+                    </span>
+                    <span class="status-badge ${delivery.status === 'delivered'
+                        ? 'status-delivered' : 'status-pending'}">
+                        ${delivery.status === 'delivered' ? '✅ Delivered' : '⏳ Pending'}
+                    </span>
+                </div>
+
+                <div class="stop-order">Stop ${index + 1} of ${allDeliveries.length}</div>
+                <div class="stop-name">👤 ${delivery.customer_name || delivery.customer_id}</div>
+                <div class="stop-cans">📦 ${delivery.num_cans} water cans to deliver</div>
+
+                <div class="stop-actions">
+                    <button class="nav-btn"
+                        onclick="navigateToStop('${delivery.customer_id}')">
+                        🗺️ This Stop
+                    </button>
+                    <button class="done-btn"
+                        onclick="markDelivered(${delivery.id})"
+                        ${delivery.status === 'delivered' ? 'disabled' : ''}>
+                        ✅ Mark Done
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        list.innerHTML = html;
+    }
+
+    async function markDelivered(deliveryId) {
+        try {
+            const response = await fetch(
+                `${API_URL}/driver/mark-delivered/${deliveryId}`,
+                { method: 'POST' }
+            );
+            const result = await response.json();
+
+            if (result.message) {
+                showToast('✅ Delivery marked as complete!');
+                const delivery = allDeliveries.find(d => d.id === deliveryId);
+                if (delivery) delivery.status = 'delivered';
+                renderDeliveries();
+                await loadProgress();
+            }
+        } catch (error) {
+            showToast('Error marking delivery!');
+        }
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+</script>
+
+</body>
+</html>

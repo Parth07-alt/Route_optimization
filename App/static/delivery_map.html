@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_c7742a5d878d48992460cf30d6ca1889 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_c7742a5d878d48992460cf30d6ca1889" ></div>
+        
+
+    <div id="map-legend" style="
+        position: fixed;
+        top: 80px;
+        right: 10px;
+        z-index: 99999;
+        background: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        min-width: 480px;
+        border: 1px solid #ddd;
+    ">
+        <h4 style="margin:0 0 10px 0;color:#333;
+        border-bottom:2px solid #eee;padding-bottom:6px;">
+            🗺️ Delivery Route Legend
+        </h4>
+        <table style="border-collapse:collapse;width:100%;">
+            <tr style="color:#888;font-size:11px;">
+                <th></th>
+                <th style="padding:2px 10px;text-align:left;">Cluster</th>
+                <th style="padding:2px 10px;text-align:left;">Driver</th>
+                <th style="padding:2px 10px;text-align:left;">Trips</th>
+                <th style="padding:2px 10px;text-align:left;">Demand</th>
+                <th style="padding:2px 10px;text-align:left;">Distance</th>
+                <th style="padding:2px 10px;text-align:left;">Stops</th>
+            </tr>
+            
+        <tr>
+            <td><div style="width:16px;height:16px;background:blue;
+            border-radius:50%;display:inline-block;"></div></td>
+            <td style="padding:4px 10px;"><b>Cluster 0</b></td>
+            <td style="padding:4px 10px;">🚚 D1</td>
+            <td style="padding:4px 10px;">🔁 1 trip(s)</td>
+            <td style="padding:4px 10px;">📦 22.76 cans</td>
+            <td style="padding:4px 10px;">📏 19.338 km</td>
+            <td style="padding:4px 10px;">🛑 5 stops</td>
+        </tr>
+        
+        <tr>
+            <td><div style="width:16px;height:16px;background:green;
+            border-radius:50%;display:inline-block;"></div></td>
+            <td style="padding:4px 10px;"><b>Cluster 1</b></td>
+            <td style="padding:4px 10px;">🚚 D3</td>
+            <td style="padding:4px 10px;">🔁 1 trip(s)</td>
+            <td style="padding:4px 10px;">📦 35.64 cans</td>
+            <td style="padding:4px 10px;">📏 30.786 km</td>
+            <td style="padding:4px 10px;">🛑 8 stops</td>
+        </tr>
+        
+        <tr>
+            <td><div style="width:16px;height:16px;background:purple;
+            border-radius:50%;display:inline-block;"></div></td>
+            <td style="padding:4px 10px;"><b>Cluster 2</b></td>
+            <td style="padding:4px 10px;">🚚 D2</td>
+            <td style="padding:4px 10px;">🔁 1 trip(s)</td>
+            <td style="padding:4px 10px;">📦 26.06 cans</td>
+            <td style="padding:4px 10px;">📏 20.225 km</td>
+            <td style="padding:4px 10px;">🛑 7 stops</td>
+        </tr>
+        
+        </table>
+        <hr style="margin:10px 0;border-color:#eee;">
+        <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:14px;height:14px;background:red;
+            border-radius:50%;display:inline-block;"></div>
+            <span>📦 Depot — Starting point for all routes</span>
+        </div>
+    </div>
+    </body>
+<script>
+    
+    
+            var map_c7742a5d878d48992460cf30d6ca1889 = L.map(
+                "map_c7742a5d878d48992460cf30d6ca1889",
+                {
+                    center: [12.9716, 77.5946],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 13,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_0ed8556eab8750abe88ba8978b0f50c1 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_0ed8556eab8750abe88ba8978b0f50c1.addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+            var marker_c820be27303df1382e9f345489a17d82 = L.marker(
+                [12.9716, 77.5946],
+                {
+}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+            var icon_5809681a2ce7b8464406615e65529dfb = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b735befa3a73a924791d8484a826025a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_6ce56b66ec0bd4d28c8640e9dcffce11 = $(`<div id="html_6ce56b66ec0bd4d28c8640e9dcffce11" style="width: 100.0%; height: 100.0%;">DEPOT</div>`)[0];
+                popup_b735befa3a73a924791d8484a826025a.setContent(html_6ce56b66ec0bd4d28c8640e9dcffce11);
+            
+        
+
+        marker_c820be27303df1382e9f345489a17d82.bindPopup(popup_b735befa3a73a924791d8484a826025a)
+        ;
+
+        
+    
+    
+            marker_c820be27303df1382e9f345489a17d82.bindTooltip(
+                `<div>
+                     📦 Depot
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c820be27303df1382e9f345489a17d82.setIcon(icon_5809681a2ce7b8464406615e65529dfb);
+            
+    
+            var circle_marker_9db9307e96bfe1e46ef8ab1eab905c7d = L.circleMarker(
+                [13.035, 77.595],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_234e1c25bf1cc603e6b41cf0ab4051f5 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_133c5d55275b9fa4083cc2fe7bc1cb7e = $(`<div id="html_133c5d55275b9fa4083cc2fe7bc1cb7e" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Rajesh Kumar             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C1<br>             <b>Demand:</b> 5.13 cans<br>             <b>Cluster:</b> 2<br>             <b>Location:</b> 13.035, 77.595         </div>         </div>`)[0];
+                popup_234e1c25bf1cc603e6b41cf0ab4051f5.setContent(html_133c5d55275b9fa4083cc2fe7bc1cb7e);
+            
+        
+
+        circle_marker_9db9307e96bfe1e46ef8ab1eab905c7d.bindPopup(popup_234e1c25bf1cc603e6b41cf0ab4051f5)
+        ;
+
+        
+    
+    
+            circle_marker_9db9307e96bfe1e46ef8ab1eab905c7d.bindTooltip(
+                `<div>
+                     🏠 Rajesh Kumar
+📦 Demand: 5.13 cans
+🔵 Cluster: 2
+📍 (13.035, 77.595)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_602705287b9de6db8787c12f2bc50c8f = L.circleMarker(
+                [13.028, 77.582],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_da073b176c98e1def4520d97fb2644c3 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_8d030a25d17aaa0959b571b3f607f68e = $(`<div id="html_8d030a25d17aaa0959b571b3f607f68e" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Priya Sharma             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C2<br>             <b>Demand:</b> 5.05 cans<br>             <b>Cluster:</b> 2<br>             <b>Location:</b> 13.028, 77.582         </div>         </div>`)[0];
+                popup_da073b176c98e1def4520d97fb2644c3.setContent(html_8d030a25d17aaa0959b571b3f607f68e);
+            
+        
+
+        circle_marker_602705287b9de6db8787c12f2bc50c8f.bindPopup(popup_da073b176c98e1def4520d97fb2644c3)
+        ;
+
+        
+    
+    
+            circle_marker_602705287b9de6db8787c12f2bc50c8f.bindTooltip(
+                `<div>
+                     🏠 Priya Sharma
+📦 Demand: 5.05 cans
+🔵 Cluster: 2
+📍 (13.028, 77.582)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2506090149efef722b8154114d8d1367 = L.circleMarker(
+                [13.045, 77.61],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_fd5087c22eefa58bce7077fc29d9c9e3 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_527c3d61763ceeff7a1a44ce3235cfb2 = $(`<div id="html_527c3d61763ceeff7a1a44ce3235cfb2" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Amit Patel             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C3<br>             <b>Demand:</b> 6.04 cans<br>             <b>Cluster:</b> 0<br>             <b>Location:</b> 13.045, 77.61         </div>         </div>`)[0];
+                popup_fd5087c22eefa58bce7077fc29d9c9e3.setContent(html_527c3d61763ceeff7a1a44ce3235cfb2);
+            
+        
+
+        circle_marker_2506090149efef722b8154114d8d1367.bindPopup(popup_fd5087c22eefa58bce7077fc29d9c9e3)
+        ;
+
+        
+    
+    
+            circle_marker_2506090149efef722b8154114d8d1367.bindTooltip(
+                `<div>
+                     🏠 Amit Patel
+📦 Demand: 6.04 cans
+🔵 Cluster: 0
+📍 (13.045, 77.61)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_69af9fd1fdc4b4c13cf270acfaa5010f = L.circleMarker(
+                [13.018, 77.578],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_611f69c9d37ca6fb33d269cf4552c30d = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_73c86f99ef1db456e99adc1f22e3dbb3 = $(`<div id="html_73c86f99ef1db456e99adc1f22e3dbb3" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Sunita Rao             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C4<br>             <b>Demand:</b> 2.09 cans<br>             <b>Cluster:</b> 2<br>             <b>Location:</b> 13.018, 77.578         </div>         </div>`)[0];
+                popup_611f69c9d37ca6fb33d269cf4552c30d.setContent(html_73c86f99ef1db456e99adc1f22e3dbb3);
+            
+        
+
+        circle_marker_69af9fd1fdc4b4c13cf270acfaa5010f.bindPopup(popup_611f69c9d37ca6fb33d269cf4552c30d)
+        ;
+
+        
+    
+    
+            circle_marker_69af9fd1fdc4b4c13cf270acfaa5010f.bindTooltip(
+                `<div>
+                     🏠 Sunita Rao
+📦 Demand: 2.09 cans
+🔵 Cluster: 2
+📍 (13.018, 77.578)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8e46cba00b869308fa6ef3c032a429f8 = L.circleMarker(
+                [13.052, 77.605],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_dc9831d56c31ef0eea82cae63c07f9b8 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_6db3f26f7218df55069cf6e94d52ee1c = $(`<div id="html_6db3f26f7218df55069cf6e94d52ee1c" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Vikram Singh             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C5<br>             <b>Demand:</b> 6.03 cans<br>             <b>Cluster:</b> 1<br>             <b>Location:</b> 13.052, 77.605         </div>         </div>`)[0];
+                popup_dc9831d56c31ef0eea82cae63c07f9b8.setContent(html_6db3f26f7218df55069cf6e94d52ee1c);
+            
+        
+
+        circle_marker_8e46cba00b869308fa6ef3c032a429f8.bindPopup(popup_dc9831d56c31ef0eea82cae63c07f9b8)
+        ;
+
+        
+    
+    
+            circle_marker_8e46cba00b869308fa6ef3c032a429f8.bindTooltip(
+                `<div>
+                     🏠 Vikram Singh
+📦 Demand: 6.03 cans
+🔵 Cluster: 1
+📍 (13.052, 77.605)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_14236cda6026e818b84207e8e201ae10 = L.circleMarker(
+                [13.032, 77.5651],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_e4ef4dbeb1f03ea447046617c5c8e01b = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_7b0940db654f46c66053e2f48183f877 = $(`<div id="html_7b0940db654f46c66053e2f48183f877" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Bhargav Reddy             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C6<br>             <b>Demand:</b> 2.46 cans<br>             <b>Cluster:</b> 2<br>             <b>Location:</b> 13.032, 77.5651         </div>         </div>`)[0];
+                popup_e4ef4dbeb1f03ea447046617c5c8e01b.setContent(html_7b0940db654f46c66053e2f48183f877);
+            
+        
+
+        circle_marker_14236cda6026e818b84207e8e201ae10.bindPopup(popup_e4ef4dbeb1f03ea447046617c5c8e01b)
+        ;
+
+        
+    
+    
+            circle_marker_14236cda6026e818b84207e8e201ae10.bindTooltip(
+                `<div>
+                     🏠 Bhargav Reddy
+📦 Demand: 2.46 cans
+🔵 Cluster: 2
+📍 (13.032, 77.5651)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0b601f85e0eafe0b6c98d0948987bbaa = L.circleMarker(
+                [13.061, 77.59],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_adc127606be70a8c55fd24cb062b94da = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_2feb1755e45551317574f8a54949b695 = $(`<div id="html_2feb1755e45551317574f8a54949b695" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Kavya Nair             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C7<br>             <b>Demand:</b> 5.67 cans<br>             <b>Cluster:</b> 1<br>             <b>Location:</b> 13.061, 77.59         </div>         </div>`)[0];
+                popup_adc127606be70a8c55fd24cb062b94da.setContent(html_2feb1755e45551317574f8a54949b695);
+            
+        
+
+        circle_marker_0b601f85e0eafe0b6c98d0948987bbaa.bindPopup(popup_adc127606be70a8c55fd24cb062b94da)
+        ;
+
+        
+    
+    
+            circle_marker_0b601f85e0eafe0b6c98d0948987bbaa.bindTooltip(
+                `<div>
+                     🏠 Kavya Nair
+📦 Demand: 5.67 cans
+🔵 Cluster: 1
+📍 (13.061, 77.59)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4d49da59c74c7991356b8295d5cd152d = L.circleMarker(
+                [13.015, 77.62],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_2c9011df0008111559df6485ef90fea2 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_98cf711f99f8fd5843cbd3cb0d4fc0d6 = $(`<div id="html_98cf711f99f8fd5843cbd3cb0d4fc0d6" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Suresh Menon             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C8<br>             <b>Demand:</b> 2.28 cans<br>             <b>Cluster:</b> 0<br>             <b>Location:</b> 13.015, 77.62         </div>         </div>`)[0];
+                popup_2c9011df0008111559df6485ef90fea2.setContent(html_98cf711f99f8fd5843cbd3cb0d4fc0d6);
+            
+        
+
+        circle_marker_4d49da59c74c7991356b8295d5cd152d.bindPopup(popup_2c9011df0008111559df6485ef90fea2)
+        ;
+
+        
+    
+    
+            circle_marker_4d49da59c74c7991356b8295d5cd152d.bindTooltip(
+                `<div>
+                     🏠 Suresh Menon
+📦 Demand: 2.28 cans
+🔵 Cluster: 0
+📍 (13.015, 77.62)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_299ebd84c8965887dc7b0a766f80ea00 = L.circleMarker(
+                [13.042, 77.57],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_86220a9b2e7900bd4ade49eabc349496 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_e4c146201954a1285b7a414e515a1727 = $(`<div id="html_e4c146201954a1285b7a414e515a1727" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Deepa Iyer             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C9<br>             <b>Demand:</b> 2.03 cans<br>             <b>Cluster:</b> 2<br>             <b>Location:</b> 13.042, 77.57         </div>         </div>`)[0];
+                popup_86220a9b2e7900bd4ade49eabc349496.setContent(html_e4c146201954a1285b7a414e515a1727);
+            
+        
+
+        circle_marker_299ebd84c8965887dc7b0a766f80ea00.bindPopup(popup_86220a9b2e7900bd4ade49eabc349496)
+        ;
+
+        
+    
+    
+            circle_marker_299ebd84c8965887dc7b0a766f80ea00.bindTooltip(
+                `<div>
+                     🏠 Deepa Iyer
+📦 Demand: 2.03 cans
+🔵 Cluster: 2
+📍 (13.042, 77.57)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1fa7405c144c1a8d4a66f2f76231fc0c = L.circleMarker(
+                [13.025, 77.63],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_fa52d8ad408b8a12a911fd326be6c03d = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_aec2b56ab37662ef23ffc49f45eb4535 = $(`<div id="html_aec2b56ab37662ef23ffc49f45eb4535" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Ravi Shankar             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C10<br>             <b>Demand:</b> 4.71 cans<br>             <b>Cluster:</b> 0<br>             <b>Location:</b> 13.025, 77.63         </div>         </div>`)[0];
+                popup_fa52d8ad408b8a12a911fd326be6c03d.setContent(html_aec2b56ab37662ef23ffc49f45eb4535);
+            
+        
+
+        circle_marker_1fa7405c144c1a8d4a66f2f76231fc0c.bindPopup(popup_fa52d8ad408b8a12a911fd326be6c03d)
+        ;
+
+        
+    
+    
+            circle_marker_1fa7405c144c1a8d4a66f2f76231fc0c.bindTooltip(
+                `<div>
+                     🏠 Ravi Shankar
+📦 Demand: 4.71 cans
+🔵 Cluster: 0
+📍 (13.025, 77.63)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a5b1b4d17ecfbf9d370e19e494972a72 = L.circleMarker(
+                [13.068, 77.615],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_0aeefc91ff61f8aed854bc56dae36305 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_29826b05e79cb73fd7ea2555114a0b70 = $(`<div id="html_29826b05e79cb73fd7ea2555114a0b70" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Anitha Rao             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C11<br>             <b>Demand:</b> 4.57 cans<br>             <b>Cluster:</b> 1<br>             <b>Location:</b> 13.068, 77.615         </div>         </div>`)[0];
+                popup_0aeefc91ff61f8aed854bc56dae36305.setContent(html_29826b05e79cb73fd7ea2555114a0b70);
+            
+        
+
+        circle_marker_a5b1b4d17ecfbf9d370e19e494972a72.bindPopup(popup_0aeefc91ff61f8aed854bc56dae36305)
+        ;
+
+        
+    
+    
+            circle_marker_a5b1b4d17ecfbf9d370e19e494972a72.bindTooltip(
+                `<div>
+                     🏠 Anitha Rao
+📦 Demand: 4.57 cans
+🔵 Cluster: 1
+📍 (13.068, 77.615)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9b8f7ad2038b4b1e224e9eb3d6c6bc88 = L.circleMarker(
+                [13.012, 77.565],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_db15f95535c037029a71aaf39c955340 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_5bb2a44234e18fba980a12dfd1d9b441 = $(`<div id="html_5bb2a44234e18fba980a12dfd1d9b441" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Kiran Kumar             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C12<br>             <b>Demand:</b> 5.96 cans<br>             <b>Cluster:</b> 2<br>             <b>Location:</b> 13.012, 77.565         </div>         </div>`)[0];
+                popup_db15f95535c037029a71aaf39c955340.setContent(html_5bb2a44234e18fba980a12dfd1d9b441);
+            
+        
+
+        circle_marker_9b8f7ad2038b4b1e224e9eb3d6c6bc88.bindPopup(popup_db15f95535c037029a71aaf39c955340)
+        ;
+
+        
+    
+    
+            circle_marker_9b8f7ad2038b4b1e224e9eb3d6c6bc88.bindTooltip(
+                `<div>
+                     🏠 Kiran Kumar
+📦 Demand: 5.96 cans
+🔵 Cluster: 2
+📍 (13.012, 77.565)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_17b67ded8432dc22a1899cf8b5033171 = L.circleMarker(
+                [13.058, 77.58],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_1eef91243bce468d4493eb8a52936676 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_c5a45ffec19ef9fbc4bfe0ea04875ac7 = $(`<div id="html_c5a45ffec19ef9fbc4bfe0ea04875ac7" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Meena Pillai             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C13<br>             <b>Demand:</b> 3.37 cans<br>             <b>Cluster:</b> 1<br>             <b>Location:</b> 13.058, 77.58         </div>         </div>`)[0];
+                popup_1eef91243bce468d4493eb8a52936676.setContent(html_c5a45ffec19ef9fbc4bfe0ea04875ac7);
+            
+        
+
+        circle_marker_17b67ded8432dc22a1899cf8b5033171.bindPopup(popup_1eef91243bce468d4493eb8a52936676)
+        ;
+
+        
+    
+    
+            circle_marker_17b67ded8432dc22a1899cf8b5033171.bindTooltip(
+                `<div>
+                     🏠 Meena Pillai
+📦 Demand: 3.37 cans
+🔵 Cluster: 1
+📍 (13.058, 77.58)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bd50faccc5a75d9b5983d59d81a34368 = L.circleMarker(
+                [13.009, 77.61],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_8e450de82e4cf7119f5137b5f3620d5e = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_2a2ecb3c1ec2be5d6e270c00a1016fe3 = $(`<div id="html_2a2ecb3c1ec2be5d6e270c00a1016fe3" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Arun Gowda             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C14<br>             <b>Demand:</b> 3.83 cans<br>             <b>Cluster:</b> 0<br>             <b>Location:</b> 13.009, 77.61         </div>         </div>`)[0];
+                popup_8e450de82e4cf7119f5137b5f3620d5e.setContent(html_2a2ecb3c1ec2be5d6e270c00a1016fe3);
+            
+        
+
+        circle_marker_bd50faccc5a75d9b5983d59d81a34368.bindPopup(popup_8e450de82e4cf7119f5137b5f3620d5e)
+        ;
+
+        
+    
+    
+            circle_marker_bd50faccc5a75d9b5983d59d81a34368.bindTooltip(
+                `<div>
+                     🏠 Arun Gowda
+📦 Demand: 3.83 cans
+🔵 Cluster: 0
+📍 (13.009, 77.61)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d21ab8483c3886afea89632a32054477 = L.circleMarker(
+                [13.075, 77.6],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_a38dbdeb4e1a261705900d503537ea66 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_e2006876920ad1dc9ad13ac4dcb124c2 = $(`<div id="html_e2006876920ad1dc9ad13ac4dcb124c2" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Pooja Hegde             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C15<br>             <b>Demand:</b> 5.87 cans<br>             <b>Cluster:</b> 1<br>             <b>Location:</b> 13.075, 77.6         </div>         </div>`)[0];
+                popup_a38dbdeb4e1a261705900d503537ea66.setContent(html_e2006876920ad1dc9ad13ac4dcb124c2);
+            
+        
+
+        circle_marker_d21ab8483c3886afea89632a32054477.bindPopup(popup_a38dbdeb4e1a261705900d503537ea66)
+        ;
+
+        
+    
+    
+            circle_marker_d21ab8483c3886afea89632a32054477.bindTooltip(
+                `<div>
+                     🏠 Pooja Hegde
+📦 Demand: 5.87 cans
+🔵 Cluster: 1
+📍 (13.075, 77.6)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b7c279f3147fbd829ae04834edf811cb = L.circleMarker(
+                [13.005, 77.59],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_d28b184880f622ba7dc0510b04dafd54 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_b3a2b13eb9c010ff20a9a859332c7ea6 = $(`<div id="html_b3a2b13eb9c010ff20a9a859332c7ea6" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Naresh Babu             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C16<br>             <b>Demand:</b> 3.34 cans<br>             <b>Cluster:</b> 2<br>             <b>Location:</b> 13.005, 77.59         </div>         </div>`)[0];
+                popup_d28b184880f622ba7dc0510b04dafd54.setContent(html_b3a2b13eb9c010ff20a9a859332c7ea6);
+            
+        
+
+        circle_marker_b7c279f3147fbd829ae04834edf811cb.bindPopup(popup_d28b184880f622ba7dc0510b04dafd54)
+        ;
+
+        
+    
+    
+            circle_marker_b7c279f3147fbd829ae04834edf811cb.bindTooltip(
+                `<div>
+                     🏠 Naresh Babu
+📦 Demand: 3.34 cans
+🔵 Cluster: 2
+📍 (13.005, 77.59)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c75384dd18a6e6474adf52c387223f27 = L.circleMarker(
+                [13.082, 77.575],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_cf9b3a08f5012ec3a2038398866ee518 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_f7830242ca0159a4685a20a7f89e89f1 = $(`<div id="html_f7830242ca0159a4685a20a7f89e89f1" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Lakshmi Devi             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C17<br>             <b>Demand:</b> 3.66 cans<br>             <b>Cluster:</b> 1<br>             <b>Location:</b> 13.082, 77.575         </div>         </div>`)[0];
+                popup_cf9b3a08f5012ec3a2038398866ee518.setContent(html_f7830242ca0159a4685a20a7f89e89f1);
+            
+        
+
+        circle_marker_c75384dd18a6e6474adf52c387223f27.bindPopup(popup_cf9b3a08f5012ec3a2038398866ee518)
+        ;
+
+        
+    
+    
+            circle_marker_c75384dd18a6e6474adf52c387223f27.bindTooltip(
+                `<div>
+                     🏠 Lakshmi Devi
+📦 Demand: 3.66 cans
+🔵 Cluster: 1
+📍 (13.082, 77.575)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d3c31b37bafe09a20bfa125b417b3de7 = L.circleMarker(
+                [13.002, 77.625],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_8b1065b09435ee45df3b22978b7aaa5c = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_701d8332db3552082e4cec6b07fa2da3 = $(`<div id="html_701d8332db3552082e4cec6b07fa2da3" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Santosh Kumar             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C18<br>             <b>Demand:</b> 5.89 cans<br>             <b>Cluster:</b> 0<br>             <b>Location:</b> 13.002, 77.625         </div>         </div>`)[0];
+                popup_8b1065b09435ee45df3b22978b7aaa5c.setContent(html_701d8332db3552082e4cec6b07fa2da3);
+            
+        
+
+        circle_marker_d3c31b37bafe09a20bfa125b417b3de7.bindPopup(popup_8b1065b09435ee45df3b22978b7aaa5c)
+        ;
+
+        
+    
+    
+            circle_marker_d3c31b37bafe09a20bfa125b417b3de7.bindTooltip(
+                `<div>
+                     🏠 Santosh Kumar
+📦 Demand: 5.89 cans
+🔵 Cluster: 0
+📍 (13.002, 77.625)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_97203616706bcf172304f57f82394a1c = L.circleMarker(
+                [13.09, 77.585],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_b01bb09e3bdf3b047ce7b887f449af8c = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_04aa1636d512bd0d57d7992f24859a6d = $(`<div id="html_04aa1636d512bd0d57d7992f24859a6d" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Rekha Singh             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C19<br>             <b>Demand:</b> 2.86 cans<br>             <b>Cluster:</b> 1<br>             <b>Location:</b> 13.09, 77.585         </div>         </div>`)[0];
+                popup_b01bb09e3bdf3b047ce7b887f449af8c.setContent(html_04aa1636d512bd0d57d7992f24859a6d);
+            
+        
+
+        circle_marker_97203616706bcf172304f57f82394a1c.bindPopup(popup_b01bb09e3bdf3b047ce7b887f449af8c)
+        ;
+
+        
+    
+    
+            circle_marker_97203616706bcf172304f57f82394a1c.bindTooltip(
+                `<div>
+                     🏠 Rekha Singh
+📦 Demand: 2.86 cans
+🔵 Cluster: 1
+📍 (13.09, 77.585)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4a879ed545e9b9e28383744b4dfbe325 = L.circleMarker(
+                [13.078, 77.61],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+        var popup_dbbcf740749a6e4c2f1ec6e5b1068d11 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_def4a3e80954b19338303ac5a26276f2 = $(`<div id="html_def4a3e80954b19338303ac5a26276f2" style="width: 100.0%; height: 100.0%;">         <div style="font-family: Arial; width: 180px;">             <h4 style="margin:0; color:#333;">                 Mahesh Yadav             </h4>             <hr style="margin:4px 0;">             <b>Customer ID:</b> C20<br>             <b>Demand:</b> 3.61 cans<br>             <b>Cluster:</b> 1<br>             <b>Location:</b> 13.078, 77.61         </div>         </div>`)[0];
+                popup_dbbcf740749a6e4c2f1ec6e5b1068d11.setContent(html_def4a3e80954b19338303ac5a26276f2);
+            
+        
+
+        circle_marker_4a879ed545e9b9e28383744b4dfbe325.bindPopup(popup_dbbcf740749a6e4c2f1ec6e5b1068d11)
+        ;
+
+        
+    
+    
+            circle_marker_4a879ed545e9b9e28383744b4dfbe325.bindTooltip(
+                `<div>
+                     🏠 Mahesh Yadav
+📦 Demand: 3.61 cans
+🔵 Cluster: 1
+📍 (13.078, 77.61)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_f769de04143e3f8c036dc42cfc1faaa8 = L.polyline(
+                [[12.9716, 77.5946], [13.002, 77.625], [13.015, 77.62], [13.025, 77.63], [13.045, 77.61], [13.009, 77.61], [12.9716, 77.5946]],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+            poly_line_f769de04143e3f8c036dc42cfc1faaa8.bindTooltip(
+                `<div>
+                     🚚 Driver: D1 | Trip 1 of 1
+🔵 Cluster: 0
+📦 Total Demand: 22.76 cans
+📏 Distance: 19.338 km
+🛣️ Stops this trip: 5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_02d0b6ecfd93834353645a29ea9f58b8 = L.polyline(
+                [[12.9716, 77.5946], [13.052, 77.605], [13.068, 77.615], [13.078, 77.61], [13.075, 77.6], [13.09, 77.585], [13.082, 77.575], [13.061, 77.59], [13.058, 77.58], [12.9716, 77.5946]],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "green", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+            poly_line_02d0b6ecfd93834353645a29ea9f58b8.bindTooltip(
+                `<div>
+                     🚚 Driver: D3 | Trip 1 of 1
+🔵 Cluster: 1
+📦 Total Demand: 35.64 cans
+📏 Distance: 30.786 km
+🛣️ Stops this trip: 8
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_ccde2db46dcfdac104294c801a1a4b1d = L.polyline(
+                [[12.9716, 77.5946], [13.005, 77.59], [13.018, 77.578], [13.028, 77.582], [13.035, 77.595], [13.042, 77.57], [13.032, 77.5651], [13.012, 77.565], [12.9716, 77.5946]],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_c7742a5d878d48992460cf30d6ca1889);
+        
+    
+            poly_line_ccde2db46dcfdac104294c801a1a4b1d.bindTooltip(
+                `<div>
+                     🚚 Driver: D2 | Trip 1 of 1
+🔵 Cluster: 2
+📦 Total Demand: 26.06 cans
+📏 Distance: 20.225 km
+🛣️ Stops this trip: 7
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>
